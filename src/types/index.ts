@@ -30,6 +30,7 @@ export interface Supervisor extends User {
 export type UserRole = "ASSOCIATE" | "SUPERVISOR";
 
 export interface RegisterFormData {
+  name: string;
   email: string;
   password: string;
   confirmPassword: string;

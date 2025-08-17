@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { validateLoginForm } from "@/lib/validation";
+import router from "next/router";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -39,8 +40,8 @@ export default function LoginPage() {
       if (response.ok) {
         // Login bem-sucedido
         console.log('Login realizado com sucesso:', result.user);
-        // Aqui você redirecionaria para a área logada
-        // Por exemplo: router.push('/dashboard')
+        localStorage.setItem('user', JSON.stringify(result.user));
+        window.location.href = '/dashboard'; // Redirecionar para o dashboard
         alert('Login realizado com sucesso!');
       } else {
         // Erro no login

@@ -136,7 +136,7 @@ export async function authenticateUser(email: string, password: string): Promise
 
         if (user.role === 'ASSOCIATE') {
             const associate = await db.get(
-                `SELECT a.*, u.email FROM associates a 
+                `SELECT a.*, u.email, u.name FROM associates a 
                 JOIN users u ON a.user_id = u.id
                 WHERE u.id = ?`,
                 [user.id]
@@ -163,7 +163,7 @@ export async function authenticateUser(email: string, password: string): Promise
             };
         } else {
             const supervisor = await db.get(
-                `SELECT s.*, u.email FROM supervisors s 
+                `SELECT s.*, u.email, u.name FROM supervisors s 
                 JOIN users u ON s.user_id = u.id
                 WHERE u.id = ?`,
                 [user.id]

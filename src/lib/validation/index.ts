@@ -17,7 +17,7 @@ export const validateEmail = (email: string): boolean => {
 }
 
 export const validateCEP = (cep: string): boolean => {
-    const cepRegex = /^\d{5}-\d{3}$/;
+    const cepRegex = /^\d{5}-?\d{3}$/;
     return cepRegex.test(cep.replace(/\D/g, ""));
 }
 
