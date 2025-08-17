@@ -1,5 +1,6 @@
 export interface User {
     id: string;
+    userId?: string; // ID da tabela users
     email: string;
     name: string;
     password: string;

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateLoginForm, validateRegisterForm } from "../validation";
-import { authenticateUser, createAssociate } from "./config";
+import { authenticateUser, createAssociate, deleteUser, getAllUsers, updateUser } from "./config";
 
 export async function RegisterRequest(request: NextRequest) {
     try {
@@ -61,6 +61,91 @@ export async function LoginRequest(request: NextRequest) {
         )
     } catch (error) {
         console.error('Error in login:', error)
+        return NextResponse.json(
+            { error: 'internal server error' },
+            { status: 500 }
+        )
+    }
+}
+
+export async function GetUsersRequest(request: NextRequest) {
+    try {
+        const users = await getAllUsers();
+
+        return NextResponse.json(
+            { users },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error('Error in get users:', error);
+        return NextResponse.json(
+            { error: 'internal server error' },
+            { status: 500 }
+        );
+    }
+}
+
+export async function UpdateUserRequest(request: NextRequest) {
+    try {
+        const body = await request.json()
+        const {userId, ...updateData} = body;
+
+        if (!userId) {
+            return NextResponse.json(
+                { error: 'userId is required' },
+                { status: 400 }
+            )
+        }
+
+        const success = await updateUser(userId, updateData);
+
+        if (!success) {
+            return NextResponse.json(
+                { error: 'failed to update user' },
+                { status: 409 }
+            )
+        }
+
+        return NextResponse.json(
+            { message: 'user updated successfully' },
+            { status: 200 }
+        )
+    } catch(error) {
+        console.error('Error in update user:', error)
+        return NextResponse.json(
+            { error: 'internal server error' },
+            { status: 500 }
+        )
+    }
+}
+
+export async function DeleteUserRequest(request: NextRequest) {
+    try{
+        const body = await request.json()
+        const {userId} = body;
+
+        if (!userId) {
+            return NextResponse.json(
+                { error: 'userId is required' },
+                { status: 400 }
+            )
+        }
+
+        const success = await deleteUser(userId);
+
+        if (!success) {
+            return NextResponse.json(
+                { error: 'failed to delete user' },
+                { status: 409 }
+            )
+        }
+
+        return NextResponse.json(
+            { message: 'user deleted successfully' },
+            { status: 200 }
+        )
+    } catch (error) {
+        console.error('Error in delete user:', error)
         return NextResponse.json(
             { error: 'internal server error' },
             { status: 500 }
